@@ -8,8 +8,8 @@
 FirebaseData fbdb;                                      // Tao class chua data tu Firebase
 
 #include <MQ135.h>                                  // Thu vien giup giao tiep voi sensor MQ135
-#define PIN_MQ135 A0                              //must analog port
-MQ135 mq135_sensor = MQ135(A0);                  // Thiet lap ket noi MQ135 voi chan analog cua ESP8266
+// #define PIN_MQ135 A0                              //must analog port
+// MQ135 mq135_sensor = MQ135(A0);                  // Thiet lap ket noi MQ135 voi chan analog cua ESP8266
 float mq135_temperature = 20.0;
 float mq135_humidity = 40.0;
 
@@ -27,7 +27,6 @@ void connectWiFi() {                                    // Ham ket noi WiFi
 
 void connectFirebase() {
    Firebase.begin("https://iot-co2-729a7-default-rtdb.asia-southeast1.firebasedatabase.app/",  "qDY2Y2XXp8lFz46vzbBUbe0fIu3ty9XrdxMtz2yd");
-   Firebase.setFloat(fbdb, "CO2_quality", 1);
 }
 
 void setup() {
@@ -38,16 +37,24 @@ void setup() {
 
 void loop() {
     //doc gia tri sensor MQ135
-  float approxedPPM = mq135_sensor.getPPM();
-  float correctedPPM = mq135_sensor.getCorrectedPPM(mq135_temperature, mq135_humidity);
+  // float approxedPPM = mq135_sensor.getPPM();
+  // float correctedPPM = mq135_sensor.getCorrectedPPM(mq135_temperature, mq135_humidity);
 
-  Serial.print("PPM: "); 
-  Serial.print(approxedPPM);
-  Serial.print("\t Corrected PPM: ");
-  Serial.print(correctedPPM);
-  Serial.println("ppm");
+  // Serial.print("PPM: "); 
+  // Serial.print(approxedPPM);
+  // Serial.print("\t Corrected PPM: ");
+  // Serial.print(correctedPPM);
+  // Serial.println("ppm");
 
   // push len firebase gia tri sensor sau moi 1h = 3600s = 0.5s + 3599.5s
-  Firebase.pushFloat(fbdb, "CO2_quality", correctedPPM);
-  delay(200);
+  //Firebase.pushFloat(fbdb, "CO2_quality", correctedPPM);
+  //delay(200);
+
+  Serial.println("Let's go");
+  for (int num = 200; num <= 210; num++)
+  {
+    Firebase.setFloat(fbdb, "CO2_RealtimeValue", num);
+    delay(5000);
+  }
+  delay(5000);
 }
