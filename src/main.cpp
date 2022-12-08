@@ -52,7 +52,7 @@ void loop() {
   // trong thuc te thi khong can 5s, co the la 1h
 
   Firebase.pushFloat(fbdb, "CO2_quality", correctedPPM);
-  Firebase.setFloat(fbdb, "CO2_RealtimeValue", correctedPPM);
+  Firebase.setFloat(fbdb, "CO2_RealtimeValue/realtimeValue", correctedPPM);
   delay(4500);
 
 }
