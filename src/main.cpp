@@ -42,17 +42,26 @@ void loop() {
   // Serial.print("PPM: "); 
   // Serial.print(approxedPPM);
 
-  float correctedPPM = mq135_sensor.getCorrectedPPM(mq135_temperature, mq135_humidity);
-  Serial.print("Corrected PPM: ");
-  Serial.print(correctedPPM);
-  Serial.println(" ppm");
+  float rZero = mq135_sensor.getRZero();
+  float ppmSelf = PARA * pow((mq135_sensor.getCorrectedResistance(mq135_temperature, mq135_humidity)/rZero), -PARB);
+  Serial.print("PPM calculate myself: ");
+  Serial.println(ppmSelf);
+
+  // float correctedPPM = mq135_sensor.getCorrectedPPM(mq135_temperature, mq135_humidity);
+  // Serial.print("Corrected PPM: ");
+  // Serial.print(correctedPPM);
+  // Serial.println(" ppm");
   delay(500);
   
   // push len firebase gia tri sensor sau moi 5s = 0.5s + 4.5s
   // trong thuc te thi khong can 5s, co the la 1h
 
-  Firebase.pushFloat(fbdb, "CO2_quality", correctedPPM);
-  Firebase.setFloat(fbdb, "CO2_RealtimeValue/realtimeValue", correctedPPM);
+  // Firebase.pushFloat(fbdb, "CO2_quality", correctedPPM);
+  // Firebase.setFloat(fbdb, "CO2_RealtimeValue/realtimeValue", correctedPPM);
+
+  Firebase.pushFloat(fbdb, "CO2_quality", ppmSelf);
+  Firebase.setFloat(fbdb, "CO2_RealtimeValue/realtimeValue", ppmSelf);
+
   delay(4500);
 
 }
